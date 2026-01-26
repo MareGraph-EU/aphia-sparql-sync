@@ -1,0 +1,33 @@
+{# Jinja Template --> Sparql Query
+ | Search for aphia taxnames and their labels (in a certain language)
+ | variables in template:
+ |    - (optional) N     : number of triples to return (no limit applied when no N is given)
+ |    - (optional) ids   : list of aphia-id to inspect 
+ |                          (defaults to listing them all)
+ |    - (optional) preds : list of predicates as strings 
+ |                          (use available predicates taxn, skos, dwc or full <uri> syntax
+ |                          (defaults to ["taxn:fullScientificName", "dwc:ScientificName"] )
+-#}
+{%- if not preds %}{%set preds = ["taxn:fullScientificName", "dwc:scientificName"] %}{% endif -%}
+PREFIX aphia: <https://aphia.org/id/taxname/>
+PREFIX taxn: <https://aphia.org/ns/taxon-name/>
+PREFIX dwc: <https://rs.tdwg.org/dwc/terms/>
+SELECT * 
+WHERE {
+{%- if aphiaids  %}
+  VALUES ?tn {
+    {%- for aid in aphiaids %} aphia:{{ aid }} {%endfor -%}
+  }
+{%endif -%}
+  VALUES ?pred { 
+    {%- for p in preds %} {{ p }} {%endfor -%}
+  }
+
+  ?tn 
+    a taxn:TaxonName;                    {#- if aphiaids set ensure type, else lists all #}
+    ?pred ?value .                       {#- captures all desired values in sperate rows #}
+    
+  BIND( lang(?value) as ?value_ln)       {#- detects set language #}
+  BIND( datatype(?value) as ?value_type) {#- detects set datatype #}
+} 
+{{ "LIMIT " ~ N   if N else "" }}        {#- add limit  statement if provided #}

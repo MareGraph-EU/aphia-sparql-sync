@@ -1,0 +1,5 @@
+feeds:
+  aphia.org:
+    url: http://aphia.org/feed
+    environment:
+      MATERIALIZE: "true"

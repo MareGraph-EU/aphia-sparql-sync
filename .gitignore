@@ -1,0 +1,8 @@
+data/graphdb/
+data/ldes-consumer/
+notebooks/data/
+notebooks/config
+
+.ipynb_checkpoints/
+.env
+__pycache__/

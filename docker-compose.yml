@@ -1,0 +1,64 @@
+# this is a sample docker-compose of how to use kgap microservices
+# it functions as (1) a list of images to be build, (2) a usage-example and (3) a quick-test
+name: ${COMPOSE_PROJECT_NAME:-aphia-sync}
+# -----------------------------------------------------------------------
+services: 
+  graphdb:
+    build:
+      context: ./graphdb
+    image: ${REG_NS:-kgap}/kgap_graphdb:${BUILD_TAG:-latest}
+    container_name: aphia-sync_graphdb
+    env_file:
+      - ./.env
+    environment: 
+      - GDB_JAVA_OPTS=-Xms8g -Xmx16g -Dcom.ontotext.graphdb.monitoring.jmx=true
+    ports:
+      - 5200:7200
+    cpus: 4
+    volumes:
+      - ./data:/data
+      - ./data/graphdb-import:/root/graphdb-import/data
+  yasgui:
+    image: redpencil/yasgui:latest
+    container_name: aphia-sync_yasgui
+    environment:
+      DEFAULT_SPARQL_ENDPOINT: "http://localhost:5200/repositories/${GDB_REPO:-aphia-sync}"
+    ports:
+      - "5210:80"
+  jupyter:
+    build:
+      context: ./jupyter
+    image: ${REG_NS:-kgap}/kgap_jupyter:${BUILD_TAG:-latest}
+    container_name: aphia-sync_jupyter
+    ports:
+      - "5220:8888"
+    links:
+      - graphdb
+    volumes:
+      - "./notebooks:/notebooks"
+      - "./data:/data"
+    env_file:
+      - ./.env
+    environment:
+      GDB_BASE: "http://graphdb:7200/"
+      NOTEBOOK_ARGS: "--NotebookApp.token=''"
+    depends_on:
+      graphdb:
+        condition: service_healthy
+  ldes-consumer:
+    build:
+      context: ./ldes-consumer
+    image: ${REG_NS:-kgap}/kgap_ldes-consumer:${BUILD_TAG:-latest}
+    container_name: aphia-sync_ldes_consumer
+    volumes:
+      - "./data:/data"
+      - "/var/run/docker.sock:/var/run/docker.sock"  # Required to spawn docker containers
+    env_file:
+      - ./.env
+    environment:
+      DOCKER_NETWORK: ${COMPOSE_PROJECT_NAME:-aphia-sync}_default
+      HOST_PWD: ${PWD}
+      DEFAULT_SPARQL_ENDPOINT: "http://graphdb:7200/repositories/${GDB_REPO:-aphia-sync}/statements" # for updates
+    depends_on:
+      graphdb:
+        condition: service_healthy
