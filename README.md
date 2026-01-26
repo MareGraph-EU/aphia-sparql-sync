@@ -48,9 +48,8 @@ When the microservices are running you can interact with them through your brows
 
 ### yasgui 
 
-http://localhost:5210/
+[YASGUI @5210](http://localhost:5210/) provides the popular yasgui sparql editor in the browser.
 
-This element in the stack just provides the yasgui sparql editor in the browser.
 Be sure to have it point to the correct sparql endpoint. (default `http://localhost:5200/repositories/aphia-sync` should work.)
 
 Compared to the built-in sparql UI in the graphd front-end this has the advantage it can also point to other sparql endpoints.
@@ -58,31 +57,31 @@ Compared to the built-in sparql UI in the graphd front-end this has the advantag
 
 ### jupyter notebooks environment
 
-http://localhost:5220/ 
+[JUPYTER @5220](http://localhost:5220/) provides a local jupyter notebook instance within the docker-networking stack.  This means it can directly access the sparl endpoint on the graphdb service.
+
+In combination with a handy jinja-templating-for-sparql feature of the [py-sema]() library loaded into this python stack we allow for quick and easy analysis of the harvested graph.
+
+For convenience we provide one `[./notebook/aphia-sync-dashboard.ipynb](http://localhost:5220/lab/tree/aphia-sync-dashboard.ipynb)` that provides the features:
+
+1. counting the aphia-related objects in the graph
+2. list and inspect predicates of available taxname objects
+3. (todo) lookup taxname `<uri>` by scientific name
+4. (todo) compare that result with what can be retrieved by [webservice cals](https://marinespecies.org/aphia.php?p=webservice)
 
 
 
-Direct link to the provided dashboard:
+## ref and explain stuff used here.
 
-http://localhost:5220/lab/tree/aphia-sync-dashboard.ipynb
-
-
-
-TODO add features:
-1. count taxnames
-2. count taxname strings-histogram per language
-3. list taxnames
-4. also call the aphia ws for taxname mapping?
+This stack builds on a number of other projects worth exploring:
+* [k-gap](https://github.com/vliz-be-opsci/k-gap) the basic docker-based python-analysis platform for knowledge graphs we are reusing here.
+* [py-sema](https://github.com/vliz-be-opsci/py-sema) a python library adding convenience to scientic research tapping into knowldge graphs and semantics (works on top of py-rdflib and others...)
+* [ldes2sparql](https://github.com/rdf-connect/ldes2sparql) an application of the [rdfconnect](https://github.com/rdf-connect) platform tuned to materialise LDES feeds into a SPARQL endpoint
 
 
+## configuration and customisation through `.env`
+
+See the comments in the `dot-env-example` as well as the `docker-compose.yml` for tuning specific settings.
 
 
-! TODO fill in some possible useful blanks:
-
-## ref and explain k-gap usage
-
-## provide some simple and straightforward docker commands for troubleshooting and additional control...
-
-## describe dot-env thingies to set / enable
 
 
