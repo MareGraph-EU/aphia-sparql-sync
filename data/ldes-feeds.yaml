@@ -3,5 +3,5 @@ feeds:
     url: http://aphia.org/feed
     environment:
       MATERIALIZE: "true"
-      OPERATION_MODE: "Replication"
+      OPERATION_MODE: "Sync"
       MEMBER_BATCH_SIZE: "1000"
