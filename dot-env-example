@@ -20,7 +20,7 @@ SRC_FOLDER=/kgap/notebooks
 
 # ldes-consumer env variables
 LDES_CONFIG_FILE=/data/ldes-feeds.yaml
-LDES2SPARQL_IMAGE=ghcr.io/rdf-connect/ldes2sparql:latest
+# LDES2SPARQL_IMAGE=ghcr.io/maregraph-eu/ldes2sparql:latest
 LDES_CONSUMER_PREFIX=aphia-sync_ldes-feed
 # LDES_LOG_LEVEL defaults to whatever LOG_LEVEL is set to
 LDES_LOG_LEVEL=DEBUG
