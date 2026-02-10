@@ -18,6 +18,7 @@ services:
     volumes:
       - ./data:/data
       - ./data/graphdb-import:/root/graphdb-import/data
+    restart: unless-stopped
   yasgui:
     image: redpencil/yasgui:latest
     container_name: aphia-sync_yasgui
@@ -59,6 +60,7 @@ services:
       DOCKER_NETWORK: ${COMPOSE_PROJECT_NAME:-aphia-sync}_default
       HOST_PWD: ${PWD}
       DEFAULT_SPARQL_ENDPOINT: "http://graphdb:7200/repositories/${GDB_REPO:-aphia-sync}/statements" # for updates
+    restart: unless-stopped
     depends_on:
       graphdb:
         condition: service_healthy
