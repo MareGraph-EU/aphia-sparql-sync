@@ -1,4 +1,6 @@
 data/graphdb/
+data/data
+data/config
 data/ldes-consumer/
 notebooks/data
 notebooks/config
