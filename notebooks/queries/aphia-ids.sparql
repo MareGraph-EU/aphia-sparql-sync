@@ -1,0 +1,17 @@
+{# Jinja Template --> Sparql Query
+ | Search for aphia taxnames and their labels (in a certain language)
+ | variables in template:
+ |    - (optional) N     : number of triples to return (no limit applied when no N is given)
+-#}
+PREFIX aphia: <https://aphia.org/id/taxname/>
+PREFIX taxn: <https://aphia.org/ns/taxon-name/>
+PREFIX dwc: <https://rs.tdwg.org/dwc/terms/>
+SELECT ?id
+where
+{    
+    ?tn a taxn:TaxonName;
+        taxn:aphiaID ?id.
+            
+} 
+order by ?id
+{{ "LIMIT " ~ N   if N else "" }}        {#- add limit  statement if provided #}
