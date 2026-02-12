@@ -6,12 +6,14 @@
 PREFIX aphia: <https://aphia.org/id/taxname/>
 PREFIX taxn: <https://aphia.org/ns/taxon-name/>
 PREFIX dwc: <https://rs.tdwg.org/dwc/terms/>
-SELECT ?id
+PREFIX dc: <https://purl.org/dc/terms/>
+SELECT ?id ?modified
 where
 {    
     ?tn a taxn:TaxonName;
-        taxn:aphiaID ?id.
+        taxn:aphiaID ?id;
+        dc:modified ?modified.
             
 } 
-order by ?id
+order by ?modified
 {{ "LIMIT " ~ N   if N else "" }}        {#- add limit  statement if provided #}
