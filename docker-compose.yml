@@ -11,7 +11,7 @@ services:
     env_file:
       - ./.env
     environment: 
-      - GDB_JAVA_OPTS=-Xms8g -Xmx16g -Dcom.ontotext.graphdb.monitoring.jmx=true
+      GDB_JAVA_OPTS: ${GDB_JAVA_OPTS:-"-Xms2g -Xmx4g -Dcom.ontotext.graphdb.monitoring.jmx=true"}
     ports:
       - 5200:7200
     cpus: 4
